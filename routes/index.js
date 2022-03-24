@@ -10,14 +10,18 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-  const validate = ajv.compile(schemaSimple);
-  const data = req.body.validateJson;
-  const valid = validate(data);
-  console.log(validate.errors);
-  if(valid){
-    res.render('index',{title: 'JSON Validator', isValid: 'JSON valid!'});
-  }else{
-    res.render('index',{title: 'JSON Validator', isValid: 'JSON not valid!'});
+  try{
+    const validate = ajv.compile(schemaSimple);
+    const data = JSON.parse(req.body.validateJson);
+    const valid = validate(data);
+    //console.log(validate.errors);
+    if(valid){
+      res.render('index',{title: 'JSON Validator', isValid: 'JSON valid!'});
+    }else{
+      res.render('index',{title: 'JSON Validator', isValid: 'JSON not valid!'});
+    }
+  }catch (e){
+    console.error(e)
   }
 });
 
